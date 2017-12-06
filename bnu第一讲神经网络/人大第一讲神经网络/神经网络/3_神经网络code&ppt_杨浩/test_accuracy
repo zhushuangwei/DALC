@@ -1,0 +1,83 @@
+
+#loss对比
+('Total loss on Testing Set:', 0.083888375234603879)
+('Accuracy of Testing Set:', 0.39510000000000001)
+
+('Total loss on Testing Set:', 0.31645804144144057)
+('Accuracy of Testing Set:', 0.91990000000000005)
+
+#minibatch对比
+('Total loss on Testing Set:', 2.3904160343170164)
+('Accuracy of Testing Set:', 0.1474)
+
+('Total loss on Testing Set:', 0.23583572480082513)
+('Accuracy of Testing Set:', 0.93269999999999997)
+
+('Total loss on Testing Set:', 0.31939135644435884)
+('Accuracy of Testing Set:', 0.91500000000000004)
+
+
+#layers对比
+('Total loss on Testing Set:', 0.31521148165464402)
+('Accuracy of Testing Set:', 0.91910000000000003)
+
+('Total loss on Testing Set:', 2.3016028610229493)
+('Accuracy of Testing Set:', 0.1135)
+
+
+
+#activation
+('Total loss on Testing Set:', 2.301394045639038)
+('Accuracy of Testing Set:', 0.1138)
+
+('Total loss on Testing Set:', 0.15316247641842201)
+('Accuracy of Testing Set:', 0.93560000000000001)
+
+#optimizer
+('Total loss on Testing Set:', 0.29316375159025193)
+('Accuracy of Testing Set:', 0.92220000000000002)
+
+('Total loss on Testing Set:', 0.20086863681972028)
+('Accuracy of Testing Set:', 0.93730000000000002)
+
+
+#dropout
+('Total loss on Testing Set:', 0.31465243690013883)
+('Accuracy of Testing Set:', 0.91949999999999998)
+
+('Total loss on Testing Set:', 0.30289591150283812)
+('Accuracy of Testing Set:', 0.91579999999999995)
+
+
+
+#simple
+Test loss 0.149512216797 Test accuracy 0.9028
+
+模型在测试集上的混淆矩阵
+[[ 966    0    1    2    0    3    5    1    2    0]
+ [   0 1114    2    3    0    1    4    2    9    0]
+ [   9    0  985    9    5    0    4    9   10    1]
+ [   0    0   13  959    0   15    0    8   13    2]
+ [   1    0    6    1  928    0    8    1    7   30]
+ [   9    1    3   18    3  828    7    1   18    4]
+ [   9    2    4    1    7    3  924    1    7    0]
+ [   4    8   23    8    4    0    0  965    0   16]
+ [   6    1    3   13    3    3    7    6  928    4]
+ [   9    5    2   11   17    5    1    6    9  944]]
+
+
+#fuzai
+
+Test loss 0.165366726326 Test accuracy 0.9585
+模型在测试集上的混淆矩阵
+[[ 966    0    1    0    2    2    5    0    2    2]
+ [   0 1123    4    2    0    2    1    1    2    0]
+ [   9    4  997    4    3    0    5    6    4    0]
+ [   0    0   13  959    0   12    1    6   15    4]
+ [   3    2    7    0  940    1    4    1    3   21]
+ [   8    0    3    7    1  857    8    0    4    4]
+ [  10    1    6    0    6    5  928    1    1    0]
+ [   0    8   24    5    3    1    0  964    3   20]
+ [  11    0    7   10    4   14   10    8  907    3]
+ [   7    6    1    3   22   10    0    8    8  944]]
+
