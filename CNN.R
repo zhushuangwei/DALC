@@ -13,7 +13,7 @@ ReLU<-function(z1){
     return(z)
 }
 set.seed(1)
-conv<-function(x,filter,step=c(1,1)){
+conv2d<-function(x,filter,step=c(1,1)){
     colM=ncol(x)#the col number of image 
     rowM=nrow(x)#the row number of image
     colN=ncol(filter)
@@ -107,27 +107,39 @@ x<-c(0,0,1,1,0,0,
      0,0,1,1,0,0)
 y<-c(1,0)
 x<-matrix(x,nrow = sqrt(length(x)),byrow=T)
-image(x,col = c(0,1))
+ image(x,col = c(0,1))
+ 
+ library('jpeg','ggplot2','reshape')
+ file<-dir()
+ f1<-readJPEG(file[1])
+### 
+f1_black= 0.299*f1[,,1]+0.587*f1[,,2]+0.114*f1[,,3]
+f1_black[f1_black<0.5]=0
+f1_black[f1_black>=0.5]=1
+image(f1_black)
+###
+
 w<-matrix(rnorm(3*3,0,1),nrow = 3,byrow = T)
 b1=rnorm(1,0,1)
 step=c(1,1)
-z1=conv(x,w,step)+b1#convolved
-a1=ReLU(z1)
+conv_out=conv2d(x,w,step)+b1#convolved
+a1=ReLU(conv_out)
 type='MAX'
 data<-pooling(a1,size=2,type =type)#pooling
 z2=data$p
 a2=z2
-a2=as.vector(a2)
-w1<-matrix(rnorm(4*5,0,1),nrow = 4,byrow = T)
-b2<-rnorm(5,0,1)
-z3<-t(w1)%*%a2+b2
-a3=sigmod(z3)
-w2<-matrix(rnorm(5*2,0,1),nrow = 5,byrow = T)
-b3<-rnorm(2,0,1)
-z4<-t(w2)%*%a3+b3
-a4<-sigmod(z4)
-C<-sum((y-a4)**2)/2
-
+layer_num=2;netral_num=c(5,2)
+    a2=as.vector(a2)
+    input_num=length(a2)
+    w1<-matrix(rnorm(input_num*netral_num[1],0,1),nrow = input_num,byrow = T)
+    b2<-rnorm(netral_num[1],0,1)
+    z3<-t(w1)%*%a2+b2
+    a3=sigmod(z3)
+    w2<-matrix(rnorm(netral_num[1]*netral_num[2],0,1),nrow = 5,byrow = T)
+    b3<-rnorm(2,0,1)
+    z4<-t(w2)%*%a3+b3
+    a4<-sigmod(z4)
+    C<-sum((y-a4)**2)/2
 #反向传播最后一层
 dz4=(a4-y)*sigmod_prime(z4)
 dw4<-a3%*%t(dz4)
@@ -136,16 +148,14 @@ db4<-dz4
 dz3=w2%*%dz4*sigmod_prime(z3)
 dw3=a2%*%t(dz3)
 db3=dz3
-
 #设置学习速率
-eta=0.3
+eta=0.1
 n=0
 #梯度下降 
 w1=w1-eta*dw3
 w2=w2-eta*dw4
 b2=b2-eta*db3
 b3=b3-eta*db4
-
 dz2=w1%*%dz3*sigmod_prime(a2)
 dz2<-matrix(dz2,nrow=sqrt(length(dz2)))
 if (type=='MAX'){
@@ -160,24 +170,18 @@ w=w-eta*dw1
 b1=b1-eta*db1
 loss=c()
 while (n<1000){
-    z1=conv(x,w,step)+b1#convolved
+    z1=conv2d(x,w,step)+b1#convolved
     a1=ReLU(z1)
     data<-pooling(a1,size=2,type =type)#pooling
     z2=data$p
     a2=z2
     a2=as.vector(a2)
-    
-    w1<-matrix(rnorm(4*5,0,1),nrow = 4,byrow = T)
-    b2<-rnorm(5,0,1)
     z3<-t(w1)%*%a2+b2
     a3=sigmod(z3)
-    w2<-matrix(rnorm(5*2,0,1),nrow = 5,byrow = T)
-    b3<-rnorm(2,0,1)
     z4<-t(w2)%*%a3+b3
     a4<-sigmod(z4)
     a4
     C<-sum((y-a4)**2)/2
-    
     #反向传播最后一层
     dz4=(a4-y)*sigmod_prime(z4)
     dw4<-a3%*%t(dz4)
@@ -207,15 +211,24 @@ while (n<1000){
     loss[n]=C
 }
 plot(loss)
-
-
-
-
-
-
-
-
-
-
-
+jy=function(x){
+    x[x>0.5]=1
+    x[x<=0.5]=0
+    return(x)
+}
+feadforward<-function(x,w,b1,w1,b2,w2,b3){
+    z1=conv2d(x,w,step)+b1#convolved
+    a1=ReLU(z1)
+    data<-pooling(a1,size=2,type =type)#pooling
+    z2=data$p
+    a2=z2
+    a2=as.vector(a2)
+    z3<-t(w1)%*%a2+b2
+    a3=sigmod(z3)
+    z4<-t(w2)%*%a3+b3
+    a4<-sigmod(z4)
+    lable=jy(a4)
+    return(lable)
+}
+feadforward(x,w,b1,w1,b2,w2,b3)
 
